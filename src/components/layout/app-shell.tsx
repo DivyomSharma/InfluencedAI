@@ -1,90 +1,73 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import { Sidebar } from "./sidebar";
-import { Modal } from "@/components/ui/modal";
-import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { PLAN_LIMITS } from "@/lib/database";
+import type { SubscriptionPlan } from "@/lib/constants";
 
 interface AppShellProps {
     children: ReactNode;
 }
 
-const creditPacks = [
-    { id: "starter", name: "Starter", credits: 100, price: 499 },
-    { id: "creator", name: "Creator", credits: 250, price: 999, popular: true },
-    { id: "studio", name: "Studio", credits: 800, price: 2499 },
-];
-
 export function AppShell({ children }: AppShellProps) {
-    const [credits, setCredits] = useState(150); // Mock initial credits
-    const [showBuyModal, setShowBuyModal] = useState(false);
-    const [selectedPack, setSelectedPack] = useState("creator");
+    const [imagesUsed, setImagesUsed] = useState(0);
+    const [imagesLimit, setImagesLimit] = useState(20);
+    const [plan, setPlan] = useState<string>("free");
+    const [isLoaded, setIsLoaded] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        async function loadProfile() {
+            const supabase = createClient();
+            const { data: { user } } = await supabase.auth.getUser();
+
+            if (user) {
+                const { data: profile } = await supabase
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", user.id)
+                    .single();
+
+                if (profile) {
+                    setPlan(profile.subscription_plan || "free");
+                    setImagesUsed(profile.monthly_images_used || 0);
+                    setImagesLimit(
+                        profile.monthly_images_limit ||
+                        PLAN_LIMITS[(profile.subscription_plan as SubscriptionPlan) || "free"] ||
+                        20
+                    );
+                }
+            }
+            setIsLoaded(true);
+        }
+
+        loadProfile();
+    }, []);
+
+    const handleSignOut = async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        router.push("/login");
+        router.refresh();
+    };
 
     return (
         <div className="flex h-screen bg-background">
-            <Sidebar credits={credits} onBuyCredits={() => setShowBuyModal(true)} />
-
+            <Sidebar
+                imagesUsed={imagesUsed}
+                imagesLimit={imagesLimit}
+                plan={plan}
+                onSignOut={handleSignOut}
+            />
             <main className="flex-1 overflow-auto">
-                {children}
-            </main>
-
-            {/* Buy Credits Modal */}
-            <Modal
-                isOpen={showBuyModal}
-                onClose={() => setShowBuyModal(false)}
-                title="Buy Credits"
-                size="md"
-            >
-                <div className="space-y-4">
-                    {creditPacks.map((pack) => (
-                        <button
-                            key={pack.id}
-                            onClick={() => setSelectedPack(pack.id)}
-                            className={`
-                w-full p-4 rounded-lg border text-left transition-all
-                ${selectedPack === pack.id
-                                    ? "border-primary bg-primary/10"
-                                    : "border-border bg-surface hover:border-primary/30"
-                                }
-              `}
-                        >
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="font-semibold text-text-primary">{pack.name}</span>
-                                        {pack.popular && (
-                                            <span className="text-xs bg-primary/20 text-primary px-2 py-0.5 rounded">
-                                                BEST VALUE
-                                            </span>
-                                        )}
-                                    </div>
-                                    <div className="text-sm text-text-secondary mt-1">
-                                        {pack.credits} credits
-                                    </div>
-                                </div>
-                                <div className="text-right">
-                                    <div className="font-semibold text-text-primary">₹{pack.price}</div>
-                                    <div className="text-xs text-text-muted">
-                                        ₹{(pack.price / pack.credits).toFixed(1)}/credit
-                                    </div>
-                                </div>
-                            </div>
-                        </button>
-                    ))}
-
-                    <div className="pt-4 border-t border-border">
-                        <div className="flex items-center justify-between mb-4">
-                            <span className="text-text-secondary">Selected</span>
-                            <span className="font-semibold text-text-primary">
-                                {creditPacks.find(p => p.id === selectedPack)?.name} Pack
-                            </span>
-                        </div>
-                        <Button className="w-full" size="lg">
-                            Pay ₹{creditPacks.find(p => p.id === selectedPack)?.price} with Stripe
-                        </Button>
+                {isLoaded ? children : (
+                    <div className="h-full flex items-center justify-center">
+                        <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
                     </div>
-                </div>
-            </Modal>
+                )}
+            </main>
         </div>
     );
 }
