@@ -84,20 +84,19 @@ export default function SignupPage() {
                 className="w-full max-w-md"
             >
                 {/* Logo */}
-                <Link href="/" className="flex items-center justify-center gap-3 mb-8">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#7F8CFF] to-[#A78BFA] flex items-center justify-center">
-                        <span className="text-white font-bold text-sm">AI</span>
+                <Link href="/" className="flex items-center justify-center gap-2.5 mb-8">
+                    <div className="w-8 h-8 rounded-lg bg-[var(--primary)] flex items-center justify-center">
+                        <span className="text-[var(--background)] font-bold text-xs">AI</span>
                     </div>
-                    <span className="text-xl font-semibold text-text-primary">InfluencedAI</span>
                 </Link>
 
                 {/* Form Card */}
-                <div className="bg-surface border border-border rounded-2xl p-8">
-                    <h1 className="text-2xl font-bold text-text-primary text-center">
+                <div className="bg-[var(--surface)] border border-[var(--border)] rounded-[14px] p-8">
+                    <h1 className="text-[22px] font-medium text-[var(--text-primary)] text-center mb-1">
                         Create your account
                     </h1>
-                    <p className="text-text-secondary text-center mt-2 mb-8">
-                        Start generating influencer content with AI
+                    <p className="text-[var(--text-secondary)] text-sm text-center mb-8">
+                        Start building with InfluencedAI
                     </p>
 
                     {error && (

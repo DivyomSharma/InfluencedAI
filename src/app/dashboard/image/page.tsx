@@ -162,26 +162,26 @@ export default function GeneratorPage() {
     };
 
     return (
-        <div className="h-full flex flex-col lg:flex-row">
+        <div className="h-full flex flex-col lg:flex-row font-sans">
             {/* Main Area */}
-            <div className="flex-1 p-6 lg:p-8 overflow-auto">
+            <div className="flex-1 p-6 lg:p-10 overflow-auto">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
                 >
-                    <h1 className="text-2xl font-bold text-text-primary">Generate Content</h1>
-                    <p className="text-text-secondary mt-1">
+                    <h1 className="text-[28px] tracking-tight font-medium text-[var(--text-primary)]">Generate Content</h1>
+                    <p className="text-[var(--text-secondary)] mt-1 text-sm">
                         Upload your product and create influencer-style marketing content
                     </p>
                 </motion.div>
 
                 {/* Upload Zone */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 0.1 }}
-                    className="mt-6"
+                    className="mt-8"
                 >
                     <UploadZone
                         onFileSelect={handleFileSelect}
@@ -198,23 +198,23 @@ export default function GeneratorPage() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mt-6"
+                            className="mt-6 overflow-hidden"
                         >
-                            <Card padding="md">
-                                <div className="flex items-center gap-4">
+                            <Card>
+                                <div className="flex items-center gap-5">
                                     <motion.div
                                         animate={{ rotate: 360 }}
                                         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                                        className="w-10 h-10 border-3 border-primary border-t-transparent rounded-full shrink-0"
+                                        className="w-8 h-8 rounded-full border-[3px] border-[var(--primary)] border-t-transparent shrink-0"
                                     />
                                     <div className="flex-1 min-w-0">
-                                        <p className="text-sm font-medium text-text-primary">Generating influencer content...</p>
-                                        <p className="text-xs text-text-muted mt-0.5">
+                                        <p className="text-sm font-medium text-[var(--text-primary)]">Generating influencer content...</p>
+                                        <p className="text-xs text-[var(--text-secondary)] mt-1">
                                             Creating {numImages} images • {INFLUENCER_TYPES.find(t => t.value === influencerType)?.label}
                                         </p>
-                                        <div className="mt-3 h-1.5 bg-panel rounded-full overflow-hidden">
+                                        <div className="mt-4 h-1 bg-[#262626] rounded-full overflow-hidden">
                                             <motion.div
-                                                className="h-full bg-gradient-to-r from-primary to-[#A78BFA] rounded-full"
+                                                className="h-full bg-white rounded-full"
                                                 animate={{ width: `${progress}%` }}
                                                 transition={{ duration: 0.3 }}
                                             />
@@ -235,10 +235,10 @@ export default function GeneratorPage() {
                             exit={{ opacity: 0 }}
                             className="mt-6"
                         >
-                            <div className="p-4 bg-danger/10 border border-danger/20 rounded-xl">
-                                <p className="text-sm text-danger font-medium">Generation Failed</p>
-                                <p className="text-xs text-danger/80 mt-1">{errorMsg}</p>
-                                <Button variant="danger" size="sm" className="mt-3" onClick={handleReset}>
+                            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-[14px]">
+                                <p className="text-sm text-red-500 font-medium">Generation Failed</p>
+                                <p className="text-[13px] text-red-500/80 mt-1 mb-4">{errorMsg}</p>
+                                <Button variant="secondary" size="sm" onClick={handleReset}>
                                     Try Again
                                 </Button>
                             </div>
@@ -250,28 +250,28 @@ export default function GeneratorPage() {
                 <AnimatePresence>
                     {status === "complete" && generatedImages.length > 0 && (
                         <motion.div
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="mt-6"
+                            className="mt-10"
                         >
-                            <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center justify-between mb-5">
                                 <div>
-                                    <h2 className="text-lg font-semibold text-text-primary">Generated Content</h2>
-                                    <p className="text-sm text-text-muted">{generatedImages.length} images ready</p>
+                                    <h2 className="text-[15px] font-medium text-[var(--text-primary)]">Generated Content</h2>
+                                    <p className="text-[13px] text-[var(--text-secondary)]">{generatedImages.length} images ready</p>
                                 </div>
                                 <Button variant="secondary" size="sm" onClick={handleReset}>
                                     Generate More
                                 </Button>
                             </div>
 
-                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
                                 {generatedImages.map((img, i) => (
                                     <motion.div
                                         key={img.id}
-                                        initial={{ opacity: 0, scale: 0.8 }}
+                                        initial={{ opacity: 0, scale: 0.95 }}
                                         animate={{ opacity: 1, scale: 1 }}
                                         transition={{ duration: 0.4, delay: i * 0.08 }}
-                                        className="group relative aspect-square rounded-xl overflow-hidden border border-border bg-panel"
+                                        className="group relative aspect-square rounded-[14px] overflow-hidden border border-[var(--border)] bg-[#111]"
                                     >
                                         <img
                                             src={img.url}
@@ -280,11 +280,11 @@ export default function GeneratorPage() {
                                             loading="lazy"
                                         />
                                         {/* Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                                            <div className="absolute bottom-0 left-0 right-0 p-3 flex gap-2">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                            <div className="absolute bottom-0 left-0 right-0 p-4 flex gap-2">
                                                 <button
                                                     onClick={() => handleDownload(img.url, i)}
-                                                    className="flex-1 py-2 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium hover:bg-white/30 transition-colors"
+                                                    className="flex-1 py-2 bg-white text-black rounded-lg text-xs font-medium hover:bg-gray-200 transition-colors"
                                                 >
                                                     ↓ Download
                                                 </button>
@@ -292,7 +292,7 @@ export default function GeneratorPage() {
                                                     onClick={() => {
                                                         navigator.clipboard.writeText(img.url);
                                                     }}
-                                                    className="py-2 px-3 bg-white/20 backdrop-blur-sm rounded-lg text-white text-xs font-medium hover:bg-white/30 transition-colors"
+                                                    className="py-2 px-3 bg-[#262626] border border-[#333] rounded-lg text-white text-xs font-medium hover:bg-[#333] transition-colors"
                                                 >
                                                     🔗
                                                 </button>
@@ -300,8 +300,8 @@ export default function GeneratorPage() {
                                         </div>
 
                                         {/* Badge */}
-                                        <div className="absolute top-2 left-2">
-                                            <span className="text-[10px] bg-black/50 backdrop-blur-sm text-white px-2 py-0.5 rounded font-medium">
+                                        <div className="absolute top-3 left-3">
+                                            <span className="text-[10px] bg-black/60 backdrop-blur-md text-white border border-white/10 px-2 py-1 rounded-md font-medium tracking-wide shadow-sm">
                                                 {PLATFORMS.find(p => p.value === platform)?.label}
                                             </span>
                                         </div>
@@ -318,11 +318,13 @@ export default function GeneratorPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.4, delay: 0.2 }}
-                className="w-full lg:w-80 bg-surface border-t lg:border-t-0 lg:border-l border-border p-6 overflow-auto"
+                className="w-full lg:w-80 bg-[#0A0A0A] border-t lg:border-t-0 lg:border-l border-[var(--border)] p-8 overflow-auto shrink-0"
             >
-                <h2 className="text-lg font-semibold text-text-primary mb-6">Generation Settings</h2>
+                <div className="sticky top-0 bg-[#0A0A0A] pb-4 z-10">
+                    <h2 className="text-[15px] font-medium text-[var(--text-primary)]">Generation Settings</h2>
+                </div>
 
-                <div className="space-y-5">
+                <div className="space-y-6 mt-2">
                     <SelectDropdown
                         label="Influencer Type"
                         options={INFLUENCER_TYPES as unknown as { value: string; label: string; icon: string }[]}
@@ -348,8 +350,8 @@ export default function GeneratorPage() {
                     />
 
                     {/* Image Count */}
-                    <div className="space-y-1.5">
-                        <label className="block text-sm font-medium text-text-secondary">Number of Images</label>
+                    <div className="space-y-2">
+                        <label className="block text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wider">Number of Images</label>
                         <div className="grid grid-cols-3 gap-2">
                             {IMAGE_COUNT_OPTIONS.map((option) => (
                                 <button
@@ -360,8 +362,8 @@ export default function GeneratorPage() {
                                         py-2.5 rounded-lg border text-sm font-medium transition-all
                                         disabled:opacity-50
                                         ${numImages === option.value
-                                            ? "border-primary bg-primary/10 text-primary"
-                                            : "border-border bg-panel text-text-primary hover:border-primary/30"
+                                            ? "border-white bg-white text-black"
+                                            : "border-[#262626] bg-[#111111] text-[var(--text-primary)] hover:border-[#444]"
                                         }
                                     `}
                                 >
@@ -372,36 +374,38 @@ export default function GeneratorPage() {
                     </div>
 
                     {/* Cost Summary */}
-                    <Card variant="elevated" padding="sm">
+                    <Card className="!p-4 bg-[#111111]">
                         <div className="flex items-center justify-between">
-                            <span className="text-sm text-text-secondary">Generation Cost</span>
-                            <div className="text-right">
-                                <span className="text-lg font-bold text-primary">{numImages}</span>
-                                <span className="text-sm text-text-muted ml-1">images</span>
+                            <span className="text-[13px] text-[var(--text-secondary)]">Generation Cost</span>
+                            <div className="text-right flex items-baseline gap-1">
+                                <span className="text-lg font-medium text-white">{numImages}</span>
+                                <span className="text-xs text-[var(--text-secondary)]">images</span>
                             </div>
                         </div>
-                        <div className="flex items-center justify-between mt-2 pt-2 border-t border-border">
-                            <span className="text-xs text-text-muted">Credits used</span>
-                            <span className="text-sm font-semibold text-text-primary">{creditCost} credit{creditCost > 1 ? "s" : ""}</span>
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-[#262626]">
+                            <span className="text-xs text-[var(--text-secondary)]">Credits used</span>
+                            <span className="text-[13px] font-medium text-white">{creditCost} credit{creditCost > 1 ? "s" : ""}</span>
                         </div>
                     </Card>
 
                     {/* Generate Button */}
-                    <Button
-                        className="w-full"
-                        size="lg"
-                        onClick={handleGenerate}
-                        disabled={!productFile || status === "generating"}
-                        isLoading={status === "generating"}
-                    >
-                        {status === "generating" ? "Generating..." : "Generate Content"}
-                    </Button>
+                    <div className="pt-2">
+                        <Button
+                            className="w-full"
+                            size="lg"
+                            onClick={handleGenerate}
+                            disabled={!productFile || status === "generating"}
+                            isLoading={status === "generating"}
+                        >
+                            {status === "generating" ? "Generating..." : "Generate Content"}
+                        </Button>
 
-                    {!productFile && (
-                        <p className="text-xs text-text-muted text-center">
-                            Upload a product image to start generating
-                        </p>
-                    )}
+                        {!productFile && (
+                            <p className="text-[13px] text-[var(--text-secondary)] text-center mt-3">
+                                Upload a product image to start
+                            </p>
+                        )}
+                    </div>
                 </div>
             </motion.div>
         </div>
